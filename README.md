@@ -1,5 +1,255 @@
 # Best Travel API
 
+## 📋 Description
+
+**Best Travel** is a Spring Boot backend application that provides a complete REST API for travel services management. The application allows managing flights, hotels, reservations, tickets, and tours, with advanced features such as currency conversion, email notifications, and report generation.
+
+## 🏗️ Architecture and Technologies
+
+### Technology Stack
+- **Framework**: Spring Boot30.5- **Java**: JDK 17base**: PostgreSQL (main data) + MongoDB (users)
+- **Cache**: Redis
+- **Security**: Spring Security + OAuth2 + JWT
+- **Documentation**: OpenAPI 3 (Swagger)
+- **Build Tool**: Maven
+- **Containers**: Docker & Docker Compose
+
+### Architectural Pattern
+- **Layered Architecture**: Controllers → Services → Repositories → Entities
+- **Separation of Concerns**: DTOs, Entities, Services
+- **Dependency Injection**: Spring IoC Container
+- **Aspects**: AOP for logging and notifications
+
+## 🚀 Main Features
+
+### 1. Flight Management (`/fly`)
+- ✅ List flights with pagination and sorting
+- ✅ Search by price (less than, between ranges)
+- ✅ Search by origin and destination
+- ✅ Redis cache for optimization
+
+### 2. Hotel Management (`/hotel`)
+- ✅ List hotels with pagination and sorting
+- ✅ Search by price (less than, between ranges)
+- ✅ Search by rating
+- ✅ Redis cache for optimization
+
+### 3. Ticket Management (`/ticket`)
+- ✅ Create, read, update and delete tickets
+- ✅ Automatic currency conversion (USD, EUR, etc.)
+- ✅ Price calculation with additional charges (25%)
+- ✅ Email notifications
+
+### 4. Reservation Management (`/reservation`)
+- ✅ Create, read, update and delete reservations
+- ✅ Automatic currency conversion
+- ✅ Price calculation with additional charges (20%)
+- ✅ Email notifications
+
+### 5. Tour Management (`/tour`)
+- ✅ Create tours combining flights and hotels
+- ✅ Add/remove tickets and reservations from tours
+- ✅ Complete travel package management
+- ✅ Email notifications
+
+### 6. User Management (`/user`)
+- ✅ Enable/disable users
+- ✅ Role management (USER, ADMIN)
+- ✅ OAuth2 authentication with JWT
+
+### 7. Reports (`/report`)
+- ✅ Excel report generation
+- ✅ Customer and sales statistics
+- ✅ Automatic file download
+
+### 8. Additional Features
+- 🔄 **Currency Conversion**: External API integration
+- 📧 **Notifications**: Automatic email sending
+- 🚫 **Blacklist**: Blocked customer control
+- 📊 **Logging**: Aspects for auditing
+- 🔒 **Security**: OAuth2 + JWT + Roles
+- ⚡ **Cache**: Redis for performance optimization
+
+## 🗄️ Data Model
+
+### Main Entities (PostgreSQL)
+- **Customer**: Customers with personal information and statistics
+- **Fly**: Flights with origin, destination, price and airline
+- **Hotel**: Hotels with location, rating and price
+- **Ticket**: Flight tickets with dates and prices
+- **Reservation**: Hotel reservations with dates and prices
+- **Tour**: Packages combining flights and hotels
+
+### Documents (MongoDB)
+- **AppUser**: System users with roles and permissions
+
+## 🔧 Configuration and Installation
+
+### Prerequisites
+- Java 17+
+- Docker and Docker Compose
+- Maven 3.6. Clone Repository
+```bash
+git clone <repository-url>
+cd best_travel
+```
+
+### 2. Configure Environment Variables
+Create `.env` file in project root:
+```env
+# Database
+POSTGRES_DB=best_travel
+POSTGRES_USER=alejandro
+POSTGRES_PASSWORD=debuggeandoideas
+
+# MongoDB
+MONGO_USERNAME=master
+MONGO_PASSWORD=debuggeandoideas
+
+# Redis
+REDIS_PASSWORD=debuggeandoideas
+
+# Email
+EMAIL_USERNAME=my_email@gmail.com
+EMAIL_PASSWORD=my_password
+
+# External API
+API_CURRENCY_KEY=My_API
+```
+
+### 3. Start Infrastructure
+```bash
+docker-compose up -d
+```
+
+### 4. Run Application
+```bash
+mvn spring-boot:run
+```
+
+### 5. Verify Installation
+- **API**: http://localhost:8080best_travel
+- **Swagger**: http://localhost:880est_travel/swagger-ui/index.html
+- **PostgreSQL**: localhost:5432**MongoDB**: localhost:27017- **Redis**: localhost:6379
+
+## 🔐 Authentication and Authorization
+
+### OAuth2 Flow1*Get Token**: POST `/oauth2/token`2**Authorize**: GET `/oauth2uthorize`
+3. **Use API**: Include Bearer token in headers
+
+### Roles and Permissions
+- **PUBLIC**: `/fly/**`, `/hotel/**`, `/swagger-ui/**`, `/report/**`
+- **USER**: `/tour/**`, `/ticket/**`, `/reservation/**`
+- **ADMIN**: `/user/**`
+
+### Test Users
+```json
+[object Object]
+  ragnar777: 3,
+ heisenberg: 4sw0d,misterX:misterX123,
+ neverMore:4dmIn"
+}
+```
+
+## 📚 Main Endpoints
+
+### Flights
+```http
+GET /fly?page=0&size=10sortType=UPPER
+GET /fly/less_price?price=100/fly/between_price?min=50ax=20
+GET /fly/origin_destiny?origin=Mexico&destiny=Grecia
+```
+
+### Hotels
+```http
+GET /hotel?page=0size=10sortType=LOWER
+GET /hotel/less_price?price=100
+GET /hotel/between_price?min=50max=200
+GET /hotel/rating?rating=4
+```
+
+### Tours
+```http
+POST /tour[object Object]
+ customerId: "VIKI771012RG93,
+  flights": [object Object]id":1}, {"id": 2],
+  hotels": [{"id: 1totalDays:3,email":user@example.com"
+}
+```
+
+### Tickets
+```http
+POST /ticket
+GET /ticket/{id}
+PUT /ticket/{id}
+DELETE /ticket/{id}
+GET /ticket?flyId=1&currency=EUR
+```
+
+## 🧪 Testing
+
+### Run Tests
+```bash
+mvn test
+```
+
+### Coverage
+```bash
+mvn jacoco:report
+```
+
+## 📊 Monitoring and Logs
+
+### Logs
+- **Level**: DEBUG for SQL, INFO for operations
+- **Format**: Structured JSON
+- **Rotation**: Daily with compression
+
+### Metrics
+- **Health Checks**: `/actuator/health`
+- **Metrics**: `/actuator/metrics`
+- **Cache Stats**: Redis INFO
+
+## 🚀 Deployment
+
+### Docker
+```bash
+docker build -t best-travel .
+docker run -p 8080:8080 best-travel
+```
+
+### Kubernetes
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: best-travel
+spec:
+  replicas:3elector:
+    matchLabels:
+      app: best-travel
+```
+
+## 📝 Contributing
+
+1. Fork the project
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
+
+## 👥 Author
+
+- 🌐 [LinkedIn](https://www.linkedin.com/in/abel-vergaray-barrena-software)
+- ✉️ Email: avergarayb@gmail.com
+- 🌍 Location: Trujillo, Peru
+
+---
+
+---
+
+# Best Travel API
+
 ## 📋 Descripción
 
 **Best Travel** es una aplicación backend desarrollada en Spring Boot que proporciona una API REST completa para la gestión de servicios de viajes. La aplicación permite gestionar vuelos, hoteles, reservas, tickets y tours, con funcionalidades avanzadas como conversión de monedas, notificaciones por email, y generación de reportes.
@@ -23,13 +273,13 @@
 
 ## 🚀 Funcionalidades Principales
 
-### 1 Gestión de Vuelos (`/fly`)
+### 1. Gestión de Vuelos (`/fly`)
 - ✅ Listar vuelos con paginación y ordenamiento
 - ✅ Búsqueda por precio (menor que, entre rangos)
 - ✅ Búsqueda por origen y destino
 - ✅ Cache con Redis para optimización
 
-###2Gestión de Hoteles (`/hotel`)
+### 2. Gestión de Hoteles (`/hotel`)
 - ✅ Listar hoteles con paginación y ordenamiento
 - ✅ Búsqueda por precio (menor que, entre rangos)
 - ✅ Búsqueda por rating
@@ -53,7 +303,7 @@
 - ✅ Gestión de paquetes completos de viaje
 - ✅ Notificaciones por email
 
-###6estión de Usuarios (`/user`)
+### 6. Gestión de Usuarios (`/user`)
 - ✅ Habilitar/deshabilitar usuarios
 - ✅ Gestión de roles (USER, ADMIN)
 - ✅ Autenticación OAuth2 con JWT
@@ -63,7 +313,7 @@
 - ✅ Estadísticas de clientes y ventas
 - ✅ Descarga automática de archivos
 
-### 8Características Adicionales
+### 8. Características Adicionales
 - 🔄 **Conversión de Monedas**: Integración con API externa
 - 📧 **Notificaciones**: Envío automático de emails
 - 🚫 **Lista Negra**: Control de clientes bloqueados
@@ -91,7 +341,7 @@
 - Docker y Docker Compose
 - Maven30.6
 
-### 1lonar el Repositorio
+### 1. Clonar el Repositorio
 ```bash
 git clone <repository-url>
 cd best_travel
@@ -120,7 +370,7 @@ EMAIL_PASSWORD=my_password
 API_CURRENCY_KEY=My_API
 ```
 
-###3antar Infraestructura
+### 3. Iniciar Infraestructura
 ```bash
 docker-compose up -d
 ```
@@ -130,7 +380,7 @@ docker-compose up -d
 mvn spring-boot:run
 ```
 
-###5. Verificar Instalación
+### 5. Verificar Instalación
 - **API**: http://localhost:8080best_travel
 - **Swagger**: http://localhost:880est_travel/swagger-ui/index.html
 - **PostgreSQL**: localhost:5432**MongoDB**: localhost:27017- **Redis**: localhost:6379# 🔐 Autenticación y Autorización
@@ -148,8 +398,7 @@ mvn spring-boot:run
 ```json
 [object Object]
   ragnar777: 3,
- heisenberg: "p4sw0rd, 
-  misterX:misterX123,
+ heisenberg: 4sw0d,misterX:misterX123,
  neverMore:4dmIn
 }
 ```
@@ -233,8 +482,20 @@ spec:
       app: best-travel
 ```
 
+## 📝 Contribución
+
+1. Fork el proyecto
+2. Crear feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit cambios (`git commit -m 'Add AmazingFeature'`)
+4. Push al branch (`git push origin feature/AmazingFeature`)
+5. Abrir Pull Request
+
+
 ## 👥 Autor
 
 - 🌐 [LinkedIn](https://www.linkedin.com/in/abel-vergaray-barrena-software)
 - ✉️ Email: avergarayb@gmail.com
 - 🌍 Location: Trujillo, Peru
+
+---
+
