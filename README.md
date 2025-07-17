@@ -7,7 +7,8 @@
 ## 🏗️ Architecture and Technologies
 
 ### Technology Stack
-- **Framework**: Spring Boot30.5- **Java**: JDK 17base**: PostgreSQL (main data) + MongoDB (users)
+- **Framework**: Spring Boot 3.0.5 - **Java**: JDK 17
+- **Database**: PostgreSQL (main data) + MongoDB (users)
 - **Cache**: Redis
 - **Security**: Spring Security + OAuth2 + JWT
 - **Documentation**: OpenAPI 3 (Swagger)
@@ -257,7 +258,7 @@ spec:
 ## 🏗️ Arquitectura y Tecnologías
 
 ### Stack Tecnológico
-- **Framework**: Spring Boot30.5- **Java**: JDK 17
+- **Framework**: Spring Boot 3.0.5 - **Java**: JDK 17
 - **Base de Datos**: PostgreSQL (datos principales) + MongoDB (usuarios)
 - **Cache**: Redis
 - **Seguridad**: Spring Security + OAuth2 + JWT
